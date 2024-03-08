@@ -1,0 +1,89 @@
+{% extends "admin.html.twig" %}
+
+
+
+{% block form %}
+
+<!-- Search Form -->
+<form method="GET" action="{{ path('admin_users') }}">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" name="q" value="{{ searchQuery }}" placeholder="Search by name">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </div>
+    </div>
+</form>
+<!-- Sort Form -->
+<form method="GET" action="{{ path('admin_users') }}">
+    <div class="input-group mb-3">
+        <select class="custom-select" name="orderBy">
+            <option value="name" {% if orderBy == 'name' %}selected{% endif %}>Name</option>
+            <option value="id" {% if orderBy == 'id' %}selected{% endif %}>id</option>
+            <!-- Add more sorting options as needed -->
+        </select>
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">Sort</button>
+        </div>
+    </div>
+</form>
+
+    <div class="container">
+        <div class="row">
+            
+            <main class="right_col">
+                <h1>Liste des utilisateurs</h1>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Rôles</th>
+                            
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usr in users %}
+                            <tr>
+                                <td>{{ usr.id }}</td>
+                                <td>{{ usr.name }}</td>
+                                <td>{{ usr.username }}</td>
+                                <td>{{ usr.email }}</td>
+                                
+
+                                <td>
+                                    {% for role in usr.roles %}
+                                        {% if role == "ROLE_ADMIN" %}
+                                            {% set name = "Administrateur" %}
+                                            {% set color = "danger" %}
+                                        {% elseif role == "ROLE_PRODUCT_ADMIN" %}
+                                            {% set name = "Admin produits" %}
+                                            {% set color = "warning" %}
+                                        {% else %}
+                                            {% set name = "Membre" %}
+                                            {% set color = "success" %}
+                                        {% endif %}
+                                        <span class="badge bg-{{ color }}">{{ name }}</span>
+                                    {% endfor %}
+                                    
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch">
+                                        
+                                        <label class="form-check-label" for="switch{{ usr.id }}"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="{{ path('app_delete_user', {'id': usr.id}) }}">Delete</a>
+                                    <a href="{{ path('app_edit_user', {'id': usr.id}) }}">Modifier</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </main>
+        </div>
+    </div>
+{% endblock %}

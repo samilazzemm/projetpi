@@ -1,0 +1,5 @@
+<h1>Activez votre compte</h1>
+<p>Bonjour {{ user.name }},</p>
+<p>Votre inscription sur le site Traveling est à valider en cliquant sur le lien ci-dessous :</p>
+<p><a href="{{ absolute_url(path('app_verification', {token: token})) }}">{{ absolute_url(path('app_verification', {token: token})) }}</a></p>
+<p>Ce lien expirera dans une heure</p>
